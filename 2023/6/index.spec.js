@@ -17,7 +17,7 @@ test("extra example", async () => {
 });
 
 // to slow
-test.skip("extra input", async () => {
+test("extra input", async () => {
   const result = await extra.main("6/input.txt");
   expect(result).toBe(35961505);
 });
