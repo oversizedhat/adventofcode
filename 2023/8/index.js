@@ -24,9 +24,6 @@ async function main(inputFile) {
     for (const direction of instructions) {
       steps++;
       nextNode = nodePathMap.get(nextNode)[direction === "L" ? 0 : 1];
-      // if (nextNode === "ZZZ") {
-      //   return nextNode;
-      // }
     }
     return nextNode;
   };
