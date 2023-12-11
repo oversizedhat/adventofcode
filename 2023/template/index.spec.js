@@ -1,7 +1,7 @@
 const main = require("./index");
 const extra = require("./extra");
 
-test("example", async () => {
+test.only("example", async () => {
   const result = await main.main("template/inputExample.txt");
   expect(result).toBe(1);
 });
