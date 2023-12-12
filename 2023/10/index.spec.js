@@ -11,19 +11,19 @@ test("input", async () => {
   expect(result).toBe(6886);
 });
 
-test.skip("extra example", async () => {
+test("extra example", async () => {
   const result = await extra.main("10/inputExtraExample.txt");
-  expect(result).toBe(1);
+  expect(result).toBe(4);
 });
 
-test.skip("extra example 2", async () => {
+test("extra example 2", async () => {
   const result = await extra.main("10/inputExtraExample2.txt");
-  expect(result).toBe(1);
+  expect(result).toBe(8);
 });
 
 test.skip("extra example 3", async () => {
   const result = await extra.main("10/inputExtraExample3.txt");
-  expect(result).toBe(1);
+  expect(result).toBe(10);
 });
 
 test.skip("extra input", async () => {

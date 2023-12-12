@@ -59,7 +59,7 @@ async function main(inputFile) {
 
   let step = 0;
   let previousPos = { x: -1, y: -1 };
-  let loopTiles = new Map();
+  const loopTiles = new Map();
 
   while (true) {
     const possibleMoves = findPossibleMoves(currentPos, previousPos);
@@ -76,7 +76,10 @@ async function main(inputFile) {
     currentPos.x = possibleMoves[0].x;
     currentPos.y = possibleMoves[0].y;
 
-    loopTiles.set(`x${currentPos.x}y${currentPos.y}`, JSON.parse(JSON.stringify(currentPos)));
+    loopTiles.set(
+      `x${currentPos.x}y${currentPos.y}`,
+      JSON.parse(JSON.stringify(currentPos))
+    );
 
     if (grid[currentPos.x][currentPos.y] == "S") {
       console.log("found S");
@@ -84,21 +87,71 @@ async function main(inputFile) {
     }
   }
 
+  let numEnclosedTiles = 0;
+
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
-      if (!loopTiles.get(`x${x}y${y}`)) {
-        grid[x][y] = "0";
+      if (!loopTiles.has(`x${x}y${y}`)) {
+        //if (grid[x][y] == ".") {
+        // ray to right
+        let loopTilesToRight = 0;
+        let loopTilesToLeft = 0;
+
+        //if (x != 0 && x != width - 1) {
+          for (let i = x; i < width; i++) {
+            if (loopTiles.has(`x${i}y${y}`)) {
+              loopTilesToRight++;
+            }
+          }
+          for (let i = x; i > 0; i--) {
+            if (loopTiles.has(`x${i}y${y}`)) {
+              loopTilesToLeft++;
+            }
+          }
+        //}
+        // if (x != 0 && y != height - 1) {
+        //   for (let i = y; i < height; i++) {
+        //     if (loopTiles.has(`x${x}y${x}`)) {
+        //       loopTilesToLeft++;
+        //     }
+        //   }
+        // }
+        if (loopTilesToRight % 2 == 0 || loopTilesToLeft % 2 == 0) {
+          grid[x][y] = "0";
+        } else {
+          grid[x][y] = "I";
+          numEnclosedTiles++;
+        }
       }
     }
   }
 
-  for (let [key, value] of loopTiles.entries()) {
-    grid[value.x][value.y] = "*";
-  }
+  // for (let x = 0; x < width; x++) {
+  //   for (let y = 0; y < height; y++) {
+  //     if (grid[x][y] = "0") {
+  //       // ray to right
+  //       let loopTilesToRight = 0;
+  //       for (let i = x; i < width; i++) {
+  //         if (grid[i][y] !== "0") {
+  //           loopTiles++;
+  //         }
+  //       }
+  //       if (loopTilesToRight%2 == 0  {
+  //         grid[x][y] = "I";
+  //       }
+  //     }
+  //   }
+  // }
 
   drawGrid(grid);
 
-  return step / 2;
+  // for (let [key, value] of loopTiles.entries()) {
+  //   grid[value.x][value.y] = "*";
+  // }
+
+  // drawGrid(grid);
+
+  return numEnclosedTiles;
 }
 
 function drawGrid(grid) {
@@ -108,7 +161,7 @@ function drawGrid(grid) {
     for (let y = 0; y < grid.length; y++) {
       s += grid[y][x];
     }
-    s+="\n";
+    s += "\n";
   }
   console.log(s);
 }
